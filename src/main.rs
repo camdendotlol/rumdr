@@ -9,12 +9,12 @@ Here's a regular line
 - still a list item
 * list
 *italics?*
-# One more header.
-#Not a header.
+# One more header
+#Not a header
 ## And level two!
-### This is level three.
-#### There's no level four so this should be invalid.
-##This is also invalid.
+### This is level three
+#### There's no level four so this should be invalid
+##This is also invalid
 > block quote
 > still block quote
 
