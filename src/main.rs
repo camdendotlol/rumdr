@@ -1,4 +1,4 @@
-use rumdr;
+use rumdr::config::get_theme;
 
 fn main() {
     // Temporary markdown string for development.
@@ -18,7 +18,13 @@ Here's a regular line
 > block quote
 > still block quote
 
-> skipped a line!");
+> skipped a line!
+```
+yeet
+# This shouldn't count
+```");
 
-    rumdr::run(text);
+    let theme = get_theme("default");
+
+    rumdr::run(text, theme);
 }

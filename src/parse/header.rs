@@ -1,7 +1,8 @@
-use yansi::Color;
 use textwrap::termwidth;
 
-pub fn handle_headers(line: &str) {
+use crate::config::Theme;
+
+pub fn handle_headers(line: &str, theme: Theme) {
   if line.len() < 4 {
     return {}
   }
@@ -40,11 +41,11 @@ pub fn handle_headers(line: &str) {
 
     let styles = vec![
       // Level 1 headers
-      Color::Green.style().bold().invert(),
+      theme.header,
       // Level 2 headers
-      Color::Green.style(),
+      theme.header,
       // Level 3 headers
-      Color::Green.style()
+      theme.header
     ];
 
     println!("{}", styles[header_level-1].paint(string_line));
