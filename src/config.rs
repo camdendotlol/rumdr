@@ -1,6 +1,42 @@
 use std::collections::HashMap;
 use yansi::{Color, Style};
 
+pub struct Config {
+  pub filename: String,
+  pub theme: Theme
+}
+
+impl Config {
+  pub fn new(mut args: std::env::Args) -> Result<Config, &'static str> {
+    args.next();
+
+    let filename = match args.next() {
+      Some(arg) => arg,
+      None => return Err("Missing markdown file")
+    };
+
+    let theme_name = match args.next() {
+      Some(arg) => arg,
+      None => "default".to_string()
+    };
+
+    let theme = set_theme(theme_name);
+
+    Ok (Config { filename, theme })
+  }
+}
+
+fn set_theme(theme_name: String) -> Theme {
+    let themes = populate_themes();
+
+    if let Some(t) = Some(themes[&theme_name]) {
+      return t
+    }
+
+    // Use default theme if argument is not supplied
+    themes["default"]
+  }
+
 #[derive(Clone, Copy)]
 pub struct Theme {
   pub header: Style,
@@ -30,13 +66,13 @@ fn populate_themes() -> HashMap<String, Theme> {
   themes
 }
 
-pub fn get_theme(name: &str) -> Theme {
-  let themes = populate_themes();  
+// pub fn get_theme(name: &str) -> Theme {
+//   let themes = populate_themes();  
 
-  let theme = match name {
-    "bob" => themes["bob"],
-    _ => themes["default"]
-  };
+//   let theme = match name {
+//     "bob" => themes["bob"],
+//     _ => themes["default"]
+//   };
 
-  theme
-}
+//   theme
+// }

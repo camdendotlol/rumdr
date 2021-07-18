@@ -1,12 +1,16 @@
+use std::{error::Error, fs};
+
 pub mod config;
 mod parse;
 
-pub fn run(text: String, theme: config::Theme) {
+pub fn run(config: config::Config) -> Result<(), Box<dyn Error>> {
+  let text = fs::read_to_string(config.filename)?;
+
   let lines = text.split("\n");
 
   let mut code_block_found = false;
 
-  for line in lines {
+  Ok(for line in lines {
     if line.len() >= 3 && &line[..3] == "```" {
 
       if code_block_found {
@@ -16,13 +20,13 @@ pub fn run(text: String, theme: config::Theme) {
       }
 
     } else if code_block_found {
-      println!("{}", theme.code.paint(line))
+      println!("{}", config.theme.code.paint(line))
     } else if line.trim() == "" {
       println!("")
     } else {
-      parse::header::handle_headers(line, theme);
+      parse::header::handle_headers(line, config.theme);
       parse::bullet::handle_bullet(line);
       parse::block_quote::handle_block_quote(line);
     }
-  }
+  })
 }

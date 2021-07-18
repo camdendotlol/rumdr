@@ -1,30 +1,14 @@
-use rumdr::config::get_theme;
+use std::{ env, process };
+use rumdr::config;
 
 fn main() {
-    // Temporary markdown string for development.
-    let text = String::from("# This is Markdown.
-Here's a regular line
-* list
-* list
-- still a list item
-* list
-*italics?*
-# One more header
-#Not a header
-## And level two!
-### This is level three
-#### There's no level four so this should be invalid
-##This is also invalid
-> block quote
-> still block quote
+    let config = config::Config::new(env::args()).unwrap_or_else(|err| {
+        eprintln!("Problem parsing arguments: {}", err);
+        process::exit(1);
+    });
 
-> skipped a line!
-```
-yeet
-# This shouldn't count
-```");
-
-    let theme = get_theme("default");
-
-    rumdr::run(text, theme);
+    if let Err(e) = rumdr::run(config) {
+        eprintln!("Error: {}", e);
+        process::exit(1);
+    };
 }
